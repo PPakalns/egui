@@ -34,6 +34,9 @@ default_fonts = ["egui/default_fonts"]
 ## Use [`glow`](https://github.com/grovesNL/glow) for painting, via [`egui_glow`](https://github.com/emilk/egui/tree/master/crates/egui_glow).
 glow = ["dep:glow", "egui_glow"]
 
+## Enable eframe debugging interface
+ui = []
+
 ## Enable saving app state to disk.
 persistence = [
   "directories-next",

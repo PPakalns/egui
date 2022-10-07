@@ -90,7 +90,7 @@ pub struct State {
     color_test: ColorTestApp,
 
     selected_anchor: String,
-    backend_panel: super::backend_panel::BackendPanel,
+    backend_panel: eframe::ui::BackendPanel,
 }
 
 /// Wraps many demo/test apps into one.

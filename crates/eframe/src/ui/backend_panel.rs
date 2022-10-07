@@ -1,3 +1,5 @@
+use crate::{Frame, IntegrationInfo};
+
 use egui::Widget;
 
 /// How often we repaint the demo app by default
@@ -46,6 +48,7 @@ impl Default for RunMode {
 #[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(default))]
 pub struct BackendPanel {
+    /// Display state of backend panel
     pub open: bool,
 
     #[cfg_attr(feature = "serde", serde(skip))]
@@ -60,7 +63,7 @@ pub struct BackendPanel {
     pixels_per_point: Option<f32>,
 
     #[cfg_attr(feature = "serde", serde(skip))]
-    frame_history: crate::frame_history::FrameHistory,
+    frame_history: super::frame_history::FrameHistory,
 
     egui_windows: EguiWindows,
 }
@@ -79,7 +82,8 @@ impl Default for BackendPanel {
 }
 
 impl BackendPanel {
-    pub fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    /// Update frame history statistics before rendering application and execute repaint run mode
+    pub fn update(&mut self, ctx: &egui::Context, frame: &mut Frame) {
         self.frame_history
             .on_new_frame(ctx.input().time, frame.info().cpu_usage);
 
@@ -97,11 +101,13 @@ impl BackendPanel {
         }
     }
 
+    /// Output backend windows at the end of the frame
     pub fn end_of_frame(&mut self, ctx: &egui::Context) {
         self.egui_windows.windows(ctx);
     }
 
-    pub fn ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
+    /// Display backend debug statistics as egui ui widgets
+    pub fn ui(&mut self, ui: &mut egui::Ui, frame: &mut Frame) {
         egui::trace!(ui);
 
         self.integration_ui(ui, frame);
@@ -145,7 +151,7 @@ impl BackendPanel {
         }
     }
 
-    fn integration_ui(&mut self, ui: &mut egui::Ui, frame: &mut eframe::Frame) {
+    fn integration_ui(&mut self, ui: &mut egui::Ui, frame: &mut Frame) {
         ui.horizontal(|ui| {
             ui.spacing_mut().item_spacing.x = 0.0;
             ui.label("egui running inside ");
@@ -202,11 +208,7 @@ impl BackendPanel {
         }
     }
 
-    fn pixels_per_point_ui(
-        &mut self,
-        ui: &mut egui::Ui,
-        info: &eframe::IntegrationInfo,
-    ) -> Option<f32> {
+    fn pixels_per_point_ui(&mut self, ui: &mut egui::Ui, info: &IntegrationInfo) -> Option<f32> {
         let pixels_per_point = self.pixels_per_point.get_or_insert_with(|| {
             info.native_pixels_per_point
                 .unwrap_or_else(|| ui.ctx().pixels_per_point())

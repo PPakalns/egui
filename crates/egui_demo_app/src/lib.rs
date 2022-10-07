@@ -1,8 +1,6 @@
 //! Demo app for egui
 
 mod apps;
-mod backend_panel;
-pub(crate) mod frame_history;
 mod wrap_app;
 
 #[cfg(target_arch = "wasm32")]

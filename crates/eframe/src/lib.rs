@@ -69,6 +69,9 @@ pub use {egui_glow, glow};
 #[cfg(feature = "wgpu")]
 pub use {egui_wgpu, wgpu};
 
+#[cfg(feature = "ui")]
+pub mod ui;
+
 mod epi;
 
 // Re-export everything in `epi` so `eframe` users don't have to care about what `epi` is:
